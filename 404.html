@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maa Khambeswari Youth Club - Member Card</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f2f2;font-family:Arial,sans-serif}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{width:360px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 5px 20px #0002}
+.header{background:#111;color:#fff;text-align:center;padding:14px 10px}.header h2{margin:0;font-size:20px}.header p{margin:4px 0;font-size:12px}
+.body{padding:18px}.photo{width:105px;height:125px;margin:0 auto 12px;border:2px solid #111;border-radius:8px;overflow:hidden;background:#eee}.photo img{width:100%;height:100%;object-fit:cover}
+.name{text-align:center;font-size:21px;font-weight:700;margin:8px 0 15px}.info{font-size:14px;line-height:1.8}.info b{display:inline-block;width:110px}
+.qr{text-align:center;margin-top:15px}.qr img{width:125px;height:125px}.note{text-align:center;font-size:11px;color:#666;margin-top:10px}
+.error{text-align:center;padding:50px 20px;font-weight:700}button{display:block;margin:16px auto 0;padding:10px 18px;border:0;border-radius:8px;background:#111;color:#fff}
+@media print{body{background:#fff}.wrap{padding:0}.card{box-shadow:none}button{display:none}}
+</style>
+</head>
+<body><div class="wrap"><div class="card" id="card"></div></div>
+<script>
+const card=document.getElementById("card");
+const path=location.pathname.replace(/\/+$/,"");
+const parts=path.split("/").filter(Boolean);
+let id=parts.length?parts[parts.length-1]:"";
+if(!/^\\d{5}$/.test(id)) id=(new URLSearchParams(location.search).get("id")||"").trim();
+
+fetch("./members.json").then(r=>r.json()).then(members=>{
+ const m=members.find(x=>String(x.id)===id);
+ if(!m){card.innerHTML='<div class="error">Member not found<br><small>Use a valid member ID.</small></div>';return;}
+ const cleanBase=location.origin+"/ld-card/";
+ const verifyURL=cleanBase+m.id+"/";
+ const qr="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data="+encodeURIComponent(verifyURL);
+ card.innerHTML=`
+ <div class="header"><h2>MAA KHAMBESWARI YOUTH CLUB</h2><p>At Sakeni, Nayagada • Estd 2025</p></div>
+ <div class="body">
+ <div class="photo"><img src="${m.photo}" alt="${m.name}" onerror="this.style.visibility='hidden'"></div>
+ <div class="name">${m.name}</div>
+ <div class="info">
+ <div><b>Member ID:</b> ${m.id}</div><div><b>Estd:</b> 2025</div>
+ <div><b>Gender:</b> ${m.gender}</div><div><b>Blood Group:</b> ${m.blood}</div>
+ <div><b>District:</b> ${m.district}</div><div><b>Mobile:</b> ${m.mobile}</div>
+ </div>
+ <div class="qr"><img src="${qr}" alt="QR Code"></div>
+ <div class="note">Scan QR to verify member card</div>
+ <button onclick="window.print()">Print / Save PDF</button>
+ </div>`;
+}).catch(()=>{card.innerHTML='<div class="error">Unable to load member data.</div>';});
+</script></body></html>
