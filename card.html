@@ -1,49 +1,115 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Maa Khambeswari Youth Club - Member Card</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maa Khambeswari Youth Club - ID Card</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#eef2f7;font-family:Arial,sans-serif;color:#172033}
-.top{background:#123b6d;color:#fff;text-align:center;padding:16px}.top h1{margin:0;font-size:22px}.top p{margin:5px 0 0;font-size:12px}
-.wrap{max-width:600px;margin:28px auto;padding:0 14px}.box{background:#fff;border-radius:14px;padding:18px;box-shadow:0 5px 20px #0001}
-.card{width:100%;max-width:430px;height:270px;margin:auto;background:linear-gradient(145deg,#fff,#edf4fc);border:2px solid #123b6d;border-radius:14px;position:relative;overflow:hidden;padding:14px}
-.title{text-align:center;color:#123b6d;font-weight:bold;font-size:19px;text-transform:uppercase}.sub{text-align:center;font-size:9px;color:#64748b;margin-top:2px}
-.main{display:flex;gap:12px;margin-top:15px}.photo{width:88px;height:112px;object-fit:cover;border:2px solid #123b6d;border-radius:6px;background:#e2e8f0}.info{font-size:11px;line-height:1.75}.info b{color:#123b6d}.qr{position:absolute;right:13px;bottom:12px;background:#fff;padding:2px}.foot{position:absolute;left:14px;bottom:15px;font-size:9px;color:#64748b}
-button,input{font:inherit}input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;margin-bottom:10px}button{border:0;border-radius:8px;padding:11px 16px;background:#123b6d;color:#fff;font-weight:bold;cursor:pointer;margin-right:7px}
-.error{color:#b91c1c;text-align:center}.center{text-align:center}
+*{box-sizing:border-box}
+body{margin:0;background:#f2f2f2;font-family:Arial,sans-serif}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{width:360px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 5px 20px #0002}
+.header{background:#111;color:#fff;text-align:center;padding:14px 10px}
+.header h2{margin:0;font-size:20px}
+.header p{margin:4px 0 0;font-size:12px}
+.body{padding:18px}
+.photo{width:105px;height:125px;margin:0 auto 12px;border:2px solid #111;border-radius:8px;overflow:hidden;text-align:center;background:#eee}
+.photo img{width:100%;height:100%;object-fit:cover}
+.name{text-align:center;font-size:21px;font-weight:700;margin:8px 0 15px}
+.info{font-size:14px;line-height:1.8}
+.info b{display:inline-block;width:105px}
+.id{text-align:center;font-weight:700;margin-top:12px}
+.qr{text-align:center;margin-top:15px}
+.qr img{width:125px;height:125px}
+.note{text-align:center;font-size:11px;color:#666;margin-top:10px}
+.error{text-align:center;padding:50px 20px;font-weight:700}
+button{display:block;margin:16px auto 0;padding:10px 18px;border:0;border-radius:8px;background:#111;color:#fff;cursor:pointer}
+@media print{
+ body{background:#fff}
+ .wrap{padding:0}
+ .card{box-shadow:none}
+ button{display:none}
+}
 </style>
 </head>
 <body>
-<div class="top"><h1>Maa Khambeswari Youth Club</h1><p>Member Digital ID Card</p></div>
-<div class="wrap"><div class="box" id="app"></div></div>
+<div class="wrap">
+  <div class="card" id="card"></div>
+</div>
+
 <script>
-const MEMBERS=[{"id":"08741","name":"RUDRA BARIK","estd":"2025","gender":"Male","blood":"B+","district":"Nayagada","mobile":"8260557695","photo":"1.JPG"},{"id":"08742","name":"KANHA PRADHAN","estd":"2025","gender":"Male","blood":"B+","district":"Nayagada","mobile":"6370728974","photo":"2.JPG"},{"id":"08743","name":"LOCHAN BISOI","estd":"2025","gender":"Male","blood":"B+","district":"Nayagada","mobile":"8328907529","photo":"3.JPG"},{"id":"08744","name":"PRATAP NAYAK","estd":"2025","gender":"Male","blood":"A+","district":"Nayagada","mobile":"9777998956","photo":"4.JPG"},{"id":"08745","name":"BIKRAM BARIK","estd":"2025","gender":"Male","blood":"A+","district":"Nayagada","mobile":"7978831367","photo":"5.JPG"},{"id":"08746","name":"SINU NAYAK","estd":"2025","gender":"Male","blood":"O+","district":"Nayagada","mobile":"7735799176","photo":"6.JPG"},{"id":"08747","name":"BIPIN JANI","estd":"2025","gender":"Male","blood":"O+","district":"Nayagada","mobile":"7735717830","photo":"7.JPG"},{"id":"08748","name":"BADAL BARIK","estd":"2025","gender":"Male","blood":"N/A","district":"Nayagada","mobile":"9692706420","photo":"8.JPG"},{"id":"08749","name":"RANJAN SAHOO","estd":"2025","gender":"Male","blood":"O+","district":"Nayagada","mobile":"8260353995","photo":"9.JPG"},{"id":"08750","name":"RANJITA MAHAKHUD","estd":"2025","gender":"Male","blood":"O+","district":"Nayagada","mobile":"8778423310","photo":"10.JPG"},{"id":"08751","name":"DEBASISH KHILAR","estd":"2025","gender":"Male","blood":"O+","district":"Nayagada","mobile":"7735417673","photo":"11.JPG"},{"id":"08752","name":"JITENDRA NAYAK","estd":"2025","gender":"Male","blood":"O+","district":"Nayagada","mobile":"7978999932","photo":"12.JPG"},{"id":"08753","name":"PRATAP NAYAK","estd":"2025","gender":"Male","blood":"A+","district":"Nayagada","mobile":"7990612573","photo":"13.JPG"},{"id":"08754","name":"JAGANNATH BARIK","estd":"2025","gender":"Male","blood":"A+","district":"Nayagada","mobile":"8895542193","photo":"14.JPG"},{"id":"08755","name":"AJIT MAHAKHUD","estd":"2025","gender":"Male","blood":"A+","district":"Nayagada","mobile":"6371576057","photo":"15.JPG"},{"id":"08756","name":"BIJAY SAHOO","estd":"2025","gender":"Male","blood":"AB+","district":"Nayagada","mobile":"8249697775","photo":"16.JPG"},{"id":"08757","name":"RAJA MAHAKHUD","estd":"2025","gender":"Male","blood":"O+","district":"Nayagada","mobile":"8328892744","photo":"17.JPG"},{"id":"08758","name":"SWADHIN SAHOO","estd":"2025","gender":"Male","blood":"B+","district":"Nayagada","mobile":"9438402067","photo":"18.JPG"},{"id":"08759","name":"BIBHUTI BARIK","estd":"2025","gender":"Male","blood":"B+","district":"Nayagada","mobile":"8249189109","photo":"19.JPG"},{"id":"08760","name":"KUNA NAYAK","estd":"2025","gender":"Male","blood":"O+","district":"Nayagada","mobile":"7735589277","photo":"20.JPG"},{"id":"08761","name":"PAPI NAYAK","estd":"2025","gender":"Male","blood":"A+","district":"Nayagada","mobile":"7735148860","photo":"21.JPG"},{"id":"08762","name":"SAMIRA NAYAK","estd":"2025","gender":"Male","blood":"N/A","district":"Nayagada","mobile":"7846824062","photo":"22.JPG"},{"id":"08763","name":"SIBA PRADHAN","estd":"2025","gender":"Male","blood":"N/A","district":"Nayagada","mobile":"7846881120","photo":"23.JPG"},{"id":"08764","name":"SAROJ NAYAK","estd":"2025","gender":"Male","blood":"A+","district":"Nayagada","mobile":"7788995933","photo":"24.JPG"},{"id":"08765","name":"SUSANT KHILAR","estd":"2025","gender":"Male","blood":"N/A","district":"Nayagada","mobile":"7008593289","photo":"25.JPG"},{"id":"08766","name":"SURESH MAHAKHUD","estd":"2025","gender":"Male","blood":"N/A","district":"Nayagada","mobile":"9437369795","photo":"26.JPG"},{"id":"08767","name":"KISHOR BARIK","estd":"2025","gender":"Male","blood":"N/A","district":"Nayagada","mobile":"6301082486","photo":"27.JPG"},{"id":"08768","name":"MANAS KHILAR","estd":"2025","gender":"Male","blood":"A+","district":"Nayagada","mobile":"9682338505","photo":"28.JPG"},{"id":"08769","name":"SAMIR BARIK","estd":"2025","gender":"Male","blood":"A+","district":"Nayagada","mobile":"8144013160","photo":"29.JPG"},{"id":"08770","name":"PRAJITA NAYAK","estd":"2025","gender":"Male","blood":"B+","district":"Nayagada","mobile":"9778040632","photo":"30.JPG"},{"id":"08771","name":"PRAVAT BARIK","estd":"2025","gender":"Male","blood":"N/A","district":"Nayagada","mobile":"7608035815","photo":"31.JPG"},{"id":"08772","name":"MANOJ SAHOO","estd":"2025","gender":"Male","blood":"N/A","district":"Nayagada","mobile":"9777067738","photo":"32.JPG"},{"id":"08773","name":"NIRAKARA SAHOO","estd":"2025","gender":"Male","blood":"N/A","district":"Nayagada","mobile":"9337869285","photo":"33.JPG"},{"id":"08774","name":"DINABANDHU SAHOO","estd":"2025","gender":"Male","blood":"O+","district":"Nayagada","mobile":"6371342403","photo":"34.JPG"},{"id":"08775","name":"SANJAYA SAHOO","estd":"2025","gender":"Male","blood":"A+","district":"Nayagada","mobile":"8249581102","photo":"35.JPG"}];
-function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
-const id=(new URLSearchParams(location.search).get('id')||'').trim();
-const m=MEMBERS.find(x=>String(x.id).trim()===id);
-const app=document.getElementById('app');
+const MEMBERS = [
+{id:"08741",name:"RUDRA BARIK",estd:"2025",gender:"Male",blood:"B+",district:"Nayagada",mobile:"8260557695",photo:"1.JPG"},
+{id:"08742",name:"KANHA PRADHAN",estd:"2025",gender:"Male",blood:"B+",district:"Nayagada",mobile:"6370728974",photo:"2.JPG"},
+{id:"08743",name:"LOCHAN BISOI",estd:"2025",gender:"Male",blood:"B+",district:"Nayagada",mobile:"8328907529",photo:"3.JPG"},
+{id:"08744",name:"PRATAP NAYAK",estd:"2025",gender:"Male",blood:"A+",district:"Nayagada",mobile:"9777998956",photo:"4.JPG"},
+{id:"08745",name:"BIKRAM BARIK",estd:"2025",gender:"Male",blood:"A+",district:"Nayagada",mobile:"7978831367",photo:"5.JPG"},
+{id:"08746",name:"SINU NAYAK",estd:"2025",gender:"Male",blood:"O+",district:"Nayagada",mobile:"7735799176",photo:"6.JPG"},
+{id:"08747",name:"BIPIN JANI",estd:"2025",gender:"Male",blood:"O+",district:"Nayagada",mobile:"7735717830",photo:"7.JPG"},
+{id:"08748",name:"BADAL BARIK",estd:"2025",gender:"Male",blood:"N/A",district:"Nayagada",mobile:"9692706420",photo:"8.JPG"},
+{id:"08749",name:"RANJAN SAHOO",estd:"2025",gender:"Male",blood:"O+",district:"Nayagada",mobile:"8260353995",photo:"9.JPG"},
+{id:"08750",name:"RANJITA MAHAKHUD",estd:"2025",gender:"Male",blood:"O+",district:"Nayagada",mobile:"8778423310",photo:"10.JPG"},
+{id:"08751",name:"DEBASISH KHILAR",estd:"2025",gender:"Male",blood:"O+",district:"Nayagada",mobile:"7735417673",photo:"11.JPG"},
+{id:"08752",name:"JITENDRA NAYAK",estd:"2025",gender:"Male",blood:"O+",district:"Nayagada",mobile:"7978999932",photo:"12.JPG"},
+{id:"08753",name:"PRATAP NAYAK",estd:"2025",gender:"Male",blood:"A+",district:"Nayagada",mobile:"7990612573",photo:"13.JPG"},
+{id:"08754",name:"JAGANNATH BARIK",estd:"2025",gender:"Male",blood:"A+",district:"Nayagada",mobile:"8895542193",photo:"14.JPG"},
+{id:"08755",name:"AJIT MAHAKHUD",estd:"2025",gender:"Male",blood:"A+",district:"Nayagada",mobile:"6371576057",photo:"15.JPG"},
+{id:"08756",name:"BIJAY SAHOO",estd:"2025",gender:"Male",blood:"AB+",district:"Nayagada",mobile:"8249697775",photo:"16.JPG"},
+{id:"08757",name:"RAJA MAHAKHUD",estd:"2025",gender:"Male",blood:"O+",district:"Nayagada",mobile:"8328892744",photo:"17.JPG"},
+{id:"08758",name:"SWADHIN SAHOO",estd:"2025",gender:"Male",blood:"B+",district:"Nayagada",mobile:"9438402067",photo:"18.JPG"},
+{id:"08759",name:"BIBHUTI BARIK",estd:"2025",gender:"Male",blood:"B+",district:"Nayagada",mobile:"8249189109",photo:"19.JPG"},
+{id:"08760",name:"KUNA NAYAK",estd:"2025",gender:"Male",blood:"O+",district:"Nayagada",mobile:"7735589277",photo:"20.JPG"},
+{id:"08761",name:"PAPI NAYAK",estd:"2025",gender:"Male",blood:"A+",district:"Nayagada",mobile:"7735148860",photo:"21.JPG"},
+{id:"08762",name:"SAMIRA NAYAK",estd:"2025",gender:"Male",blood:"N/A",district:"Nayagada",mobile:"7846824062",photo:"22.JPG"},
+{id:"08763",name:"SIBA PRADHAN",estd:"2025",gender:"Male",blood:"N/A",district:"Nayagada",mobile:"7846881120",photo:"23.JPG"},
+{id:"08764",name:"SAROJ NAYAK",estd:"2025",gender:"Male",blood:"A+",district:"Nayagada",mobile:"7788995933",photo:"24.JPG"},
+{id:"08765",name:"SUSANT KHILAR",estd:"2025",gender:"Male",blood:"N/A",district:"Nayagada",mobile:"7008593289",photo:"25.JPG"},
+{id:"08766",name:"SURESH MAHAKHUD",estd:"2025",gender:"Male",blood:"N/A",district:"Nayagada",mobile:"9437369795",photo:"26.JPG"},
+{id:"08767",name:"KISHOR BARIK",estd:"2025",gender:"Male",blood:"N/A",district:"Nayagada",mobile:"6301082486",photo:"27.JPG"},
+{id:"08768",name:"MANAS KHILAR",estd:"2025",gender:"Male",blood:"A+",district:"Nayagada",mobile:"9682338505",photo:"28.JPG"},
+{id:"08769",name:"SAMIR BARIK",estd:"2025",gender:"Male",blood:"A+",district:"Nayagada",mobile:"8144013160",photo:"29.JPG"},
+{id:"08770",name:"PRAJITA NAYAK",estd:"2025",gender:"Male",blood:"B+",district:"Nayagada",mobile:"9778040632",photo:"30.JPG"},
+{id:"08771",name:"PRAVAT BARIK",estd:"2025",gender:"Male",blood:"N/A",district:"Nayagada",mobile:"7608035815",photo:"31.JPG"},
+{id:"08772",name:"MANOJ SAHOO",estd:"2025",gender:"Male",blood:"N/A",district:"Nayagada",mobile:"9777067738",photo:"32.JPG"},
+{id:"08773",name:"NIRAKARA SAHOO",estd:"2025",gender:"Male",blood:"N/A",district:"Nayagada",mobile:"9337869285",photo:"33.JPG"},
+{id:"08774",name:"DINABANDHU SAHOO",estd:"2025",gender:"Male",blood:"O+",district:"Nayagada",mobile:"6371342403",photo:"34.JPG"},
+{id:"08775",name:"SANJAYA SAHOO",estd:"2025",gender:"Male",blood:"A+",district:"Nayagada",mobile:"8249581102",photo:"35.JPG"}
+];
+
+const id = (new URLSearchParams(location.search).get("id") || "").trim();
+const m = MEMBERS.find(x => String(x.id).trim() === id);
+const card = document.getElementById("card");
+
 if(!m){
- app.innerHTML='<h2>Member not found</h2><p class="error">Invalid or missing Member ID.</p>';
+  card.innerHTML = '<div class="error">Member not found<br><small>Use a valid member ID.</small></div>';
 }else{
- app.innerHTML=`<div class="card" id="card">
- <div class="title">Maa Khambeswari Youth Club</div>
- <div class="sub">MEMBER ID CARD • ESTD. ${esc(m.estd)}</div>
- <div class="main"><img class="photo" src="${esc(m.photo)}" onerror="this.style.visibility='hidden'">
- <div class="info"><div><b>Name:</b> ${esc(m.name)}</div><div><b>Member ID:</b> ${esc(m.id)}</div>
- <div><b>Gender:</b> ${esc(m.gender)}</div><div><b>Blood Group:</b> ${esc(m.blood)}</div>
- <div><b>District:</b> ${esc(m.district)}</div><div><b>Mob:</b> ${esc(m.mobile)}</div></div></div>
- <div class="foot">Official Club Member</div><div class="qr" id="qr"></div></div>
- <div class="center"><button onclick="downloadPDF()">Download PDF</button></div>`;
- new QRCode(document.getElementById('qr'),{text:location.href,width:62,height:62,colorDark:'#123b6d',colorLight:'#fff'});
-}
-async function downloadPDF(){
- const canvas=await html2canvas(document.getElementById('card'),{scale:3,backgroundColor:'#fff'});
- const {jsPDF}=window.jspdf,pdf=new jsPDF({orientation:'landscape',unit:'mm',format:[86,54]});
- pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,86,54);pdf.save(m.id+'-'+m.name.replace(/\s+/g,'_')+'.pdf');
+  const base = location.href.split("?")[0];
+  const qrURL = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + encodeURIComponent(base + "?id=" + m.id);
+
+  card.innerHTML = `
+    <div class="header">
+      <h2>MAA KHAMBESWARI YOUTH CLUB</h2>
+      <p>At Sakeni, Nayagada • Estd 2025</p>
+    </div>
+    <div class="body">
+      <div class="photo">
+        <img src="${m.photo}" alt="${m.name}" onerror="this.style.visibility='hidden'">
+      </div>
+      <div class="name">${m.name}</div>
+      <div class="info">
+        <div><b>Member ID:</b> ${m.id}</div>
+        <div><b>Estd:</b> ${m.estd}</div>
+        <div><b>Gender:</b> ${m.gender}</div>
+        <div><b>Blood Group:</b> ${m.blood}</div>
+        <div><b>District:</b> ${m.district}</div>
+        <div><b>Mobile:</b> ${m.mobile}</div>
+      </div>
+      <div class="qr"><img src="${qrURL}" alt="QR Code"></div>
+      <div class="note">Scan QR to verify member card</div>
+      <button onclick="window.print()">Print / Save PDF</button>
+    </div>
+  `;
 }
 </script>
-</body></html>
+</body>
+</html>
